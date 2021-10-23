@@ -26,4 +26,6 @@ public class Database {
     //список вчерашних котировок по отношению к рублю
     static public List<Double> cur_tom = new ArrayList<Double>();
 
+    static public List<Double> cur_nom = new ArrayList<>();
+
 }

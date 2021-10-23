@@ -8,25 +8,28 @@
     android:background="@drawable/ic_background_grad">
 
     <ScrollView
-        android:layout_width="387dp"
-        android:layout_height="335dp"
+        android:layout_width="338dp"
+        android:layout_height="265dp"
+        android:stretchColumns="3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.143"
-        android:stretchColumns="3">
+        app:layout_constraintVertical_bias="0.143">
 
         <TableLayout
 
             android:id="@+id/tablica"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
+
             <TableRow>
-                <TextView android:id="@+id/zag1"/>
+
+                <TextView android:id="@+id/zag1" />
+
                 <TextView android:id="@+id/zag2" />
+
                 <TextView android:id="@+id/zag3" />
             </TableRow>
         </TableLayout>

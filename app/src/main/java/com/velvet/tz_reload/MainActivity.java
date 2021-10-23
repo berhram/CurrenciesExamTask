@@ -29,6 +29,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -92,19 +93,15 @@ public class MainActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 input =  parent.getItemAtPosition(position).toString();
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
         spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 output= parent.getItemAtPosition(position).toString();
-
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -138,6 +135,8 @@ public class MainActivity extends AppCompatActivity {
     //
     List<Double> cur_tom = new ArrayList<>();
 
+    List<Double> cur_nom = new ArrayList<>();
+
     public static String URL = "https://www.cbr-xml-daily.ru/daily_json.js";
 
     public void refreshData() {
@@ -152,9 +151,11 @@ public class MainActivity extends AppCompatActivity {
                     cur_codes.clear();
                     cur_tod.clear();
                     cur_tom.clear();
+                    cur_nom.clear();
                     cur_codes.add("RUB");
                     cur_tod.add(1.0);
                     cur_tom.add(1.0);
+                    cur_nom.add(1.0);
                     JSONObject valute = response.getJSONObject("Valute");
                     Iterator<String> iterator = valute.keys();
                     while (iterator.hasNext()) {
@@ -162,11 +163,13 @@ public class MainActivity extends AppCompatActivity {
                         cur_codes.add(temp.getString("CharCode"));
                         cur_tod.add(temp.getDouble("Value"));
                         cur_tom.add(temp.getDouble("Previous"));
+                        cur_nom.add(temp.getDouble("Nominal"));
                     }
                     Log.d("Rest Response", response.toString());
                     Database.cur_codes = cur_codes;
                     Database.cur_tod = cur_tod;
                     Database.cur_tom = cur_tom;
+                    Database.cur_nom = cur_nom;
                 }
                 catch (JSONException e) {
                     e.printStackTrace();
@@ -182,12 +185,13 @@ public class MainActivity extends AppCompatActivity {
     }
     public void calculus() {
         try {
+            DecimalFormat twoDForm = new DecimalFormat("#.00");
             double nominal = Double.parseDouble(inputText.getText().toString());
-            double kurs_vvod = cur_tod.get(cur_codes.indexOf(input));
+            double kurs_vvod = cur_tod.get(cur_codes.indexOf(input)) / cur_nom.get(cur_codes.indexOf(input));
             double rub_eq_input = nominal * kurs_vvod;
-            double kurs_vivod = cur_tod.get(cur_codes.indexOf(output));
+            double kurs_vivod = cur_tod.get(cur_codes.indexOf(output)) / cur_nom.get(cur_codes.indexOf(output));
             double itog = rub_eq_input / kurs_vivod;
-            outputText.setText(Math.round(itog*100.0)/100.0+"");
+            outputText.setText(twoDForm.format(itog));
         }
         catch (Exception e) {
             outputText.setText("Error");

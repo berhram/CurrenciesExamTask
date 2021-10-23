@@ -24,6 +24,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -94,7 +95,8 @@ public class MainActivity2 extends AppCompatActivity {
             TextView change = new TextView(this);
             codes.setText(loc_cur_codes.get(i));
             nominal.setText(loc_cur_tod.get(i).toString());
-            double changeDif = Math.round((loc_cur_tod.get(i) - loc_cur_tom.get(i))*1000.0)/1000.0;
+            DecimalFormat twoDForm = new DecimalFormat("00.00");
+            double changeDif = (loc_cur_tod.get(i) / loc_cur_tom.get(i)) - 1.0;
             double changePercent = changeDif * 100.0;
             if (changePercent>=0.0) {
 
@@ -103,7 +105,7 @@ public class MainActivity2 extends AppCompatActivity {
             else {
                 row.setBackgroundColor(Color.rgb(200, 30, 30));
             }
-            change.setText(changePercent+"%");
+            change.setText(twoDForm.format(changePercent)+"%");
             row.addView(codes);
             row.addView(nominal);
             row.addView(change);
